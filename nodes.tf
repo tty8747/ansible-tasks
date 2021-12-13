@@ -29,12 +29,13 @@ data "aws_ami" "centos7" {
 }
 
 resource "aws_instance" "node" {
-  count = length(var.instances)
+  count         = length(var.instances)
   ami           = data.aws_ami.centos7.id
   instance_type = "t2.micro"
-  key_name = aws_key_pair.ansible_key.id
-  subnet_id = aws_subnet.my_subnet.id
+  key_name      = aws_key_pair.ansible_key.id
   associate_public_ip_address = true
+  subnet_id = aws_subnet.my_subnet.id
+  vpc_security_group_ids = [aws_security_group.aws_sg.id]
 
   tags = {
     Name = var.instances[count.index]
