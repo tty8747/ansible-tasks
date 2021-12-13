@@ -1,5 +1,5 @@
-resource "aws_key_pair" "ansible-key" {
-  key_name   = "ansible-key"
+resource "aws_key_pair" "ansible_key" {
+  key_name   = "ansible_key"
   public_key = file(var.path_to_mykey)
 }
 
@@ -32,8 +32,11 @@ resource "aws_instance" "node" {
   count = length(var.instances)
   ami           = data.aws_ami.centos7.id
   instance_type = "t2.micro"
+  key_name = aws_key_pair.ansible_key.id
+  subnet_id = aws_subnet.my_subnet.id
+  associate_public_ip_address = true
 
   tags = {
-    Name = "${var.instances[count.index]}"
+    Name = var.instances[count.index]
   }
 }
