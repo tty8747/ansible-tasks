@@ -1,0 +1,14 @@
+${yamlencode({
+  "aws": {
+    "vars": {
+      "ansible_ssh_common_args": "-o StrictHostKeyChecking=no"}
+    "hosts": {
+      for i, name in names:
+        "${name}" => {
+          "ansible_host": "${ips["${i}"]}"
+          "ansible_user": "${ansible_user}"
+          "ansible_port": "${ansible_port}"
+        }
+    }
+  }
+})}
