@@ -1,0 +1,46 @@
+---
+
+- hosts:
+  - aws
+  gather_facts: no
+
+  vars:
+    param1:
+      name: net.ifnames
+      value: 0
+    param2:
+      name: biosdevname
+      value: 0
+
+  tasks:
+
+  - name: Become block
+    block:
+      
+      - debug:
+          msg: " {{ item.name }}={{ item.value }}"
+        loop: "{{ line }}"
+
+      - name: Set directives
+        lineinfile:
+          path: /etc/default/grub
+          regexp: '^GRUB_CMDLINE_LINUX="'
+          line: "GRUB_CMDLINE_LINUX=\"console=tty0 crashkernel=auto console=ttyS0,115200 {{ param1.name }}={{ param1.value }} {{ param2.name }}={{ param2.value }}\""
+        register: IsChanged
+
+      - name: Run grub2-mkconfig
+        command:
+          cmd: grub2-mkconfig
+        when: IsChanged.changed
+
+        
+            # Example with module replace
+            #      - name: Set directives
+            #        replace:
+            #          path: /etc/default/grub
+            #          regexp: '^GRUB_CMDLINE_LINUX="'
+            #          replace: "GRUB_CMDLINE_LINUX=\"net.ifnames=0 biosdevname=0 "
+            #        register: result
+
+    become_user: root
+    become: yes

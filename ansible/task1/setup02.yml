@@ -1,0 +1,42 @@
+---
+
+- hosts:
+  - aws
+
+  vars:
+    message: "Welcome to my web server"
+
+  tasks:
+
+  - name: Become block
+    block:
+
+      - name: Ensure apache is absent
+        yum:
+          name: httpd
+          state: absent
+
+      - name: Disable traffic in default zone for http service
+        firewalld:
+          service: http
+          permanent: yes
+          state: disabled
+        notify:
+        - Reload firewalld
+
+      - name: Remove the file
+        file:
+          path: /var/www/html/index.html
+          state: absent
+
+    become_user: root
+    become: yes
+    when: ansible_facts['distribution'] == 'CentOS'
+    
+  handlers:
+
+    - name: Reload firewalld
+      systemd:
+        state: reloaded
+        name: firewalld
+      become: yes
