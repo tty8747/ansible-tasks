@@ -17,10 +17,6 @@
   - name: Become block
     block:
       
-      - debug:
-          msg: " {{ item.name }}={{ item.value }}"
-        loop: "{{ line }}"
-
       - name: Set directives
         lineinfile:
           path: /etc/default/grub
