@@ -1,0 +1,14 @@
+---
+users:
+  alice:
+    email: alice@example.com
+    home: /alicefolder
+    pass: "{{ vault_alice_pass }}"
+  bob:
+    email: bob@example.com
+    home: /home/bob
+    pass: "{{ vault_bob_pass }}"
+  carol:
+    email: carol@example.com
+    home: /home/carol
+    pass: "{{ vault_carol_pass }}"

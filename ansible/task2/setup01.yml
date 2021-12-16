@@ -1,0 +1,31 @@
+---
+
+- hosts:
+  - aws
+
+  vars_files:
+    - users_vars/vars.yml
+    - users_vars/vault.yml
+
+  tasks:
+
+  - name: Become block
+    block:
+      
+      - debug:
+          msg: "{{ item }}"
+        loop: "{{ lookup('dict', users) }}"
+        no_log: True
+
+      - name: Add users
+        ansible.builtin.user:
+          name: "{{ item.key }}"
+          comment: "{{ item.value.email }}"
+          password: "{{ item.value.pass | password_hash('sha512', ['Aleezo6H','ahC9coun','fei2Ohz7','eeyee2Uz','uY7xi7ub','aQu9utee','utoo1Quo','wi0ooSha'] | random ) }}"
+          move_home: yes
+          home: "{{ item.value.home }}"
+        loop: "{{ lookup('dict', users) }}"
+        no_log: True
+
+    become_user: root
+    become: yes
