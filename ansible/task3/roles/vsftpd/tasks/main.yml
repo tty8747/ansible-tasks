@@ -1,0 +1,52 @@
+---
+- name: Install vsftpd
+  ansible.builtin.yum:
+    name: vsftpd
+    state: present
+
+- name: Ensure vsftpd is enabled
+  ansible.builtin.systemd:
+    name: vsftpd
+    enabled: yes
+    state: started
+
+- name: Create root folder
+  ansible.builtin.file:
+    path: "{{ vsftpd_share_path }}"
+    state: directory
+    mode: u=rx,g=rx
+    owner: ftp
+    group: ftp
+
+- name: Create upload folder
+  ansible.builtin.file:
+    path: "{{ vsftpd_share_path }}/upload"
+    state: directory
+    mode: '0777'
+    owner: ftp
+    group: ftp
+
+- name: Put vsftpd config
+  ansible.builtin.template:
+    src: vsftpd.conf.j2
+    dest: /etc/vsftpd/vsftpd.conf
+    owner: root
+    group: root
+    mode: '0640'
+  notify: restart vsftpd
+  tags: config
+
+  # - name: Install context for vsftpd
+  #   ansible.posix.seboolean:
+  #     name: ftpd_anon_write
+  #     state: yes
+  #     persistent: yes
+  #   notify: restart vsftpd
+
+  # - name: Apply 
+  #   sefcontext:
+  #     target: "{{ vsftpd_share_path }}(/.*)?"
+  #     # target: '/var/ftp/pub(/.*)?'
+  #     setype: public_content_rw_t
+  #     state: present
+  #   notify: call restorecon

@@ -1,0 +1,8 @@
+---
+vsftpd_anonymous_enable: 'YES'
+
+vsftpd_local_umask: 0007
+vsftpd_banner: "Welcome to {{ inventory_hostname }} ftp Server!"
+
+vsftpd_xferlog_file: '/var/log/xferlog'
+vsftpd_share_path: '/var/ftp/pub'

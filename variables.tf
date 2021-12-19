@@ -5,7 +5,8 @@ variable "path_to_mykey" {
 }
 
 variable "instances" {
-  default = ["control.example.com", "node1.example.com", "node2.example.com"]
+# default = ["control.example.com", "node1.example.com", "node2.example.com"]
+  default = ["control.example.com"]
 }
 
 variable "cidr_block" {

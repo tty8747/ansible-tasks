@@ -1,0 +1,16 @@
+---
+- name: Ensure firewalld is present
+  yum:
+    name: firewalld
+    state: present
+  become: yes
+
+- name: Permit traffic 
+  firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+  loop: "{{ ports }}"
+  notify:
+  - Reload firewalld
+  become: yes

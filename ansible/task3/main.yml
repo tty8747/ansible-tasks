@@ -1,0 +1,9 @@
+---
+- hosts: aws
+
+  vars:
+    vsftpd_share_path: '/var/ftp/pub'
+    share_path: "{{ vsftpd_share_path }}"
+
+  roles:
+    - { role: vsftpd, become: yes }

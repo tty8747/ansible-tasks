@@ -1,0 +1,13 @@
+---
+- name: Install context for vsftpd
+  ansible.posix.seboolean:
+    name: ftpd_anon_write
+    state: yes
+    persistent: yes
+  notify: restart vsftpd
+
+- name: Apply public_content_rw_t
+  sefcontext:
+    target: "{{ share_path }}(/.*)?"
+    setype: public_content_rw_t
+    state: present

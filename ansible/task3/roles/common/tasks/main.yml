@@ -1,0 +1,22 @@
+---
+- name: Install necessary releases
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ reps }}"
+  become: yes
+
+- name: Update packages
+  ansible.builtin.yum:
+    update_cache: yes
+  become: yes
+
+- name: Include Centos specific variables
+  include_vars: "{{ ansible_distribution }}{{ ansible_distribution_version }}.yml"
+
+- name: Install dependencies
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages }}"
+  become: yes
