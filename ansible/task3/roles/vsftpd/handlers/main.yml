@@ -1,0 +1,8 @@
+---
+- name: restart vsftpd
+  ansible.builtin.systemd:
+    name: vsftpd
+    state: restarted
+
+    # - name: call restorecon
+    #   command: "restorecon -F -R -v {{ vsftpd_share_path }}"
