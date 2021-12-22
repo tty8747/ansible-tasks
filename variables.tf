@@ -9,6 +9,10 @@ variable "instances" {
   default = ["control.example.com"]
 }
 
+variable "instances2" {
+  default = ["node1.example.com", "node2.example.com"]
+}
+
 variable "cidr_block" {
   default = "192.168.0.0/16"
 }
